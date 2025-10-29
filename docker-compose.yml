@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  fastapi-app:
+    build:
+      context: ./fastapi-app
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./fastapi-app:/app
+    networks:
+      - app-network
+
+  streamlit-app:
+    build:
+      context: ./streamlit-app
+      dockerfile: Dockerfile
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./streamlit-app:/app
+    depends_on:
+      - fastapi-app
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
