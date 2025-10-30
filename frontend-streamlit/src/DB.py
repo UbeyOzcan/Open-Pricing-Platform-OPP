@@ -1,6 +1,5 @@
 import psycopg
 
-
 class DBConn:
     def __init__(self, username: str, password: str, db:str, host: str, port: int):
         self.username = username
@@ -9,7 +8,7 @@ class DBConn:
         self.port = port
         self.db = db
 
-    def connect(self):
+    def connect_postgres(self):
         conn = psycopg.connect(
             dbname=self.db,
             user=self.username,
