@@ -17,6 +17,3 @@ class DBConn:
             port=self.port
         )
         return conn
-
-C = DBConn("postgres", "postgres", "frenchmtpldb", "localhost", "2022")
-conn = C.connect()

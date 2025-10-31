@@ -1,8 +1,8 @@
 import streamlit as st
 
 st.set_page_config(
-    page_title="Ex-stream-ly Cool App",
-    page_icon="🧊",
+    page_title="Homepage",
+    page_icon=":streamlit:",
     layout="wide",
     initial_sidebar_state="expanded"
     #menu_items={
@@ -12,6 +12,6 @@ st.set_page_config(
     #}
 )
 
-st.title("Ex-stream-ly Cool App")
+st.title("Homepage :streamlit:")
+st.markdown("Welcome to OPP, Open Pricing Platform")
 
-st.write("Ex-stream-ly Cool App")
