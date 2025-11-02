@@ -1,7 +1,7 @@
 import psycopg
 
 class DBConn:
-    def __init__(self, username: str, password: str, db:str, host: str, port: int):
+    def __init__(self, username: str, password: str, db:str, host: str, port: str):
         self.username = username
         self.password = password
         self.host = host
