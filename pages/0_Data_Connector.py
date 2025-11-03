@@ -2,7 +2,7 @@ import streamlit as st
 from src.DB import DBConn
 import pandas as pd
 
-st.title("Welcome to Data Connector")
+st.title("Data Connector")
 
 dbs = st.selectbox(
     "What type of database are you using?",
