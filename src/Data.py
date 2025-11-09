@@ -1,6 +1,9 @@
 import pandas as pd
 from typing import List
 import numpy as np
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+
 
 class Analyzer:
     def __init__(self,df:pd.DataFrame):
@@ -26,3 +29,25 @@ class Analyzer:
         df['Severity'] = np.where(df[exposure[1]].sum() == 0, 0, df[y[1]]/df[exposure[1]])
         df['Risk Premium'] = df['Frequency'] * df['Severity']
         return df
+
+    def plot_univariate(self, df:pd.DataFrame, x:str, metric:str, exposure:List[str]) -> object:
+        exp = exposure[1] if metric == 'Severity' else exposure[0]
+
+        fig = make_subplots(specs=[[{"secondary_y": True}]])
+
+        fig.add_trace(
+            go.Scatter(x=df[x], y=df[metric], name=metric, mode="lines"),
+            secondary_y=True
+        )
+
+        fig.add_trace(
+            go.Bar(x=df[x], y=df[exp], name=exp),
+            secondary_y=False
+        )
+
+        fig.update_xaxes(title_text=x)
+
+        # Set y-axes titles
+        fig.update_yaxes(title_text=exp, secondary_y=False)
+        fig.update_yaxes(title_text=metric, secondary_y=True)
+        return fig

@@ -44,6 +44,7 @@ if go:
     if dbs == "Postgres":
         try:
             data = fetch_data()
+            data = data.drop('IDpol', axis=1)
             # Initialization
             if 'data' not in st.session_state:
                 st.session_state['data'] = data

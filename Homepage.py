@@ -15,3 +15,7 @@ st.set_page_config(
 st.title("Homepage :streamlit:")
 st.markdown("Welcome to OPP, Open Pricing Platform")
 
+clear = st.button("Clear Cache")
+if clear:
+    for key in st.session_state.keys():
+        del st.session_state[key]

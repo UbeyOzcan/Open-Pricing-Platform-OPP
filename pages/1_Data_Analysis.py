@@ -1,8 +1,6 @@
 import streamlit as st
 from src.Data import Analyzer
 
-
-
 st.title("Data Analysis")
 if 'data' not in st.session_state:
     st.warning('No data found')
@@ -27,5 +25,14 @@ else:
         uni_df = A.univariate(x=rf, y = Y, exposure= E)
         uni_df_calc = A.calc_freq_sev(df=uni_df, y = Y, exposure = E)
         st.dataframe(uni_df_calc)
+
+        fig_freq = A.plot_univariate(df=uni_df_calc, x=rf, metric='Frequency', exposure=E)
+        st.plotly_chart(fig_freq, theme="streamlit", use_container_width=True, selection_mode="box")
+
+        fig_sev = A.plot_univariate(df=uni_df_calc, x=rf, metric='Severity', exposure=E)
+        st.plotly_chart(fig_sev, theme="streamlit", use_container_width=True)
+
+        fig_rp = A.plot_univariate(df=uni_df_calc, x=rf, metric='Risk Premium', exposure=E)
+        st.plotly_chart(fig_rp, theme="streamlit", use_container_width=True)
     except Exception as e:
         st.error(e)
