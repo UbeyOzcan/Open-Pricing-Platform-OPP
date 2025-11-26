@@ -1,0 +1,6 @@
+{
+  "Model Name" :  "Frequency",
+  "Response" : "ClaimNb",
+  "Offset" : "Exposure",
+  "Distribution" : "Poisson"
+}

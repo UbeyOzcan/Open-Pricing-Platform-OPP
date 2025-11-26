@@ -3,7 +3,8 @@ from typing import List
 import numpy as np
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-
+from plotly.figure_factory import create_distplot
+from scipy.stats import gamma, lognorm
 
 class Analyzer:
     def __init__(self,df:pd.DataFrame):
@@ -51,3 +52,25 @@ class Analyzer:
         fig.update_yaxes(title_text=exp, secondary_y=False)
         fig.update_yaxes(title_text=metric, secondary_y=True)
         return fig
+
+    def plot_density(self, x:list) -> object:
+        x = np.log(x)
+        group_labels = ['distplot example']
+        fig = create_distplot([x], group_labels, show_hist=False, show_rug=False)
+        return fig
+
+    def fit_gamma(self, x) -> dict:
+        shape, loc, scale = gamma.fit(x)
+        return {"shape" : shape, "loc" : loc, "scale" : scale}
+
+    def fit_lognormal(self, x) -> dict:
+        s, loc, scale = lognorm.fit(x)
+        return {"s" : s, "loc" : loc, "scale" : scale}
+
+    def simulate_gamma(self, params:list):
+        num = np.random.gamma(shape=params["shape"], scale=params["scale"], size=1000)
+        return np.log(num)
+
+    def simulate_lognormal(self, params:list):
+        num = np.random.lognormal(mean=np.log(params["scale"]), sigma=params["s"], size=1000)
+        return np.log(num)
