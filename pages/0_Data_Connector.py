@@ -38,10 +38,12 @@ go = st.button(label="GET !")
 @st.cache_data
 def fetch_data() -> pd.DataFrame:
     C = DBConn(USER, PASSWORD, DBNAME,HOST, PORT)
-
+    cols = ', '.join([f'"{col}"' for col in st.session_state["model"]["Columns"]])
+    query = f"SELECT {cols} FROM {TABLE} FETCH FIRST 100 ROWS ONLY"
+    st.write(query)
     with C.connect_postgres() as conn:
         cur = conn.cursor()
-        cur.execute(f"SELECT * FROM {TABLE}")
+        cur.execute(query)
         rows = cur.fetchall()
         columns = [desc[0] for desc in cur.description]
         df = pd.DataFrame(rows, columns=columns)
@@ -53,7 +55,6 @@ if go:
     if dbs == "Postgres":
         try:
             data = fetch_data()
-            data = data.drop('IDpol', axis=1)
             # Initialization
             if 'data' not in st.session_state:
                 st.session_state['data'] = data

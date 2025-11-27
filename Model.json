@@ -2,5 +2,6 @@
   "Model Name" :  "Frequency",
   "Response" : "ClaimNb",
   "Offset" : "Exposure",
-  "Distribution" : "Poisson"
+  "Distribution" : "Poisson",
+  "Columns" : ["VehPower", "VehAge", "DrivAge", "BonusMalus", "VehBrand", "VehGas", "Area", "Density", "Region", "Exposure", "ClaimNb", "ClaimAmount"]
 }
