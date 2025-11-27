@@ -20,24 +20,18 @@ with col2:
 with col3:
     model = st.file_uploader("Upload Json Model file", type="json")
 
-auth_json = {}
-model_json = {}
 
 if auth is not None:
-    auth_json = json.load(auth)
-    st.write(auth_json)
+    st.session_state["auth"] = json.load(auth)
+    USER = st.session_state["auth"]["user"]
+    PASSWORD = st.session_state["auth"]["password"]
+    HOST = st.session_state["auth"]["host"]
+    PORT = st.session_state["auth"]["port"]
+    DBNAME = st.session_state["auth"]["database"]
+    TABLE = st.session_state["auth"]["table"]
 
 if model is not None:
-    model_json = json.load(model)
-    st.write(model_json)
-
-# Fetch variables
-USER = auth_json["user"]
-PASSWORD = auth_json["password"]
-HOST = auth_json["host"]
-PORT = auth_json["port"]
-DBNAME = auth_json["database"]
-TABLE = auth_json["table"]
+    st.session_state["model"] = json.load(model)
 
 go = st.button(label="GET !")
 
