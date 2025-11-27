@@ -39,8 +39,7 @@ go = st.button(label="GET !")
 def fetch_data() -> pd.DataFrame:
     C = DBConn(USER, PASSWORD, DBNAME,HOST, PORT)
     cols = ', '.join([f'"{col}"' for col in st.session_state["model"]["Columns"]])
-    query = f"SELECT {cols} FROM {TABLE} FETCH FIRST 100 ROWS ONLY"
-    st.write(query)
+    query = f"SELECT {cols} FROM {TABLE} "
     with C.connect_postgres() as conn:
         cur = conn.cursor()
         cur.execute(query)

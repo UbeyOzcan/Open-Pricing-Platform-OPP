@@ -4,35 +4,28 @@ from src.Data import Analyzer
 st.title("Data Analysis")
 if 'data' not in st.session_state:
     st.warning('No data found')
+
 else:
-    col1, col2, col3, col4 = st.columns(4)
     data=st.session_state['data']
-    cols = data.columns.tolist()
-    with col1:
-        st.session_state['resp_freq'] = st.selectbox('Select response for Frequency Model',cols)
-    with col2:
-        st.session_state['exp_freq'] = st.selectbox('Select exposure for Frequency Model',cols)
-    with col3:
-        st.session_state['resp_sev'] = st.selectbox('Select response for Severity Model',cols)
-    with col4:
-        st.session_state['exp_sev'] = st.selectbox('Select exposure for Severity Model',cols)
     A =Analyzer(df=data)
     try:
-        Y = [st.session_state['resp_freq'], st.session_state['resp_sev']]
-        E = [st.session_state['exp_freq'], st.session_state['exp_sev']]
-        rfs = A.get_vars(y=Y, exposure=E)
+        rfs = A.get_vars(y=st.session_state['model']['Response'], exposure=st.session_state['model']['Offset'])
         rf = st.selectbox('Select Variable',rfs)
-        uni_df = A.univariate(x=rf, y = Y, exposure= E)
-        uni_df_calc = A.calc_freq_sev(df=uni_df, y = Y, exposure = E)
+        uni_df = A.univariate(x=rf,
+                              y = st.session_state['model']['Response'],
+                              exposure= st.session_state['model']['Offset'])
+
+        uni_df_calc = A.calc_resp(df=uni_df,
+                                  y = st.session_state['model']['Response'],
+                                  exposure = st.session_state['model']['Offset'],
+                                  model_name=st.session_state['model']['Model Name'])
         st.dataframe(uni_df_calc)
 
-        fig_freq = A.plot_univariate(df=uni_df_calc, x=rf, metric='Frequency', exposure=E)
-        st.plotly_chart(fig_freq, theme="streamlit", use_container_width=True, selection_mode="box")
+        fig = A.plot_univariate(df=uni_df_calc,
+                                x=rf,
+                                model_name=st.session_state['model']['Model Name'],
+                                exposure=st.session_state['model']['Offset'])
+        st.plotly_chart(fig, theme="streamlit", width="stretch", selection_mode="box")
 
-        fig_sev = A.plot_univariate(df=uni_df_calc, x=rf, metric='Severity', exposure=E)
-        st.plotly_chart(fig_sev, theme="streamlit", use_container_width=True)
-
-        fig_rp = A.plot_univariate(df=uni_df_calc, x=rf, metric='Risk Premium', exposure=E)
-        st.plotly_chart(fig_rp, theme="streamlit", use_container_width=True)
     except Exception as e:
         st.error(e)
