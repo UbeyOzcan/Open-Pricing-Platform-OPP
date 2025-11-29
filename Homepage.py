@@ -11,7 +11,6 @@ st.set_page_config(
     #    'About': "# This is a header. This is an *extremely* cool app!"
     #}
 )
-
 st.title("Homepage :streamlit:")
 st.markdown("Welcome to OPP, Open Pricing Platform")
 

@@ -8,6 +8,10 @@ if 'data' not in st.session_state:
 
 else:
     data=st.session_state['data']
+    st.sidebar.write(f"Model : {st.session_state['model']['Model Name']}")
+    st.sidebar.write(f"Response : {st.session_state['model']['Response']}")
+    st.sidebar.write(f"Offset : {st.session_state['model']['Offset']}")
+    st.sidebar.write(f"Distribution : {st.session_state['model']['Distribution']}")
     A = Analyzer(df=data)
     try:
         rfs = A.get_vars(y=st.session_state['model']['Response'], exposure=st.session_state['model']['Offset'])

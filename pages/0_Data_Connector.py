@@ -29,7 +29,6 @@ if auth is not None:
     PORT = st.session_state["auth"]["port"]
     DBNAME = st.session_state["auth"]["database"]
     TABLE = st.session_state["auth"]["table"]
-
 if model is not None:
     st.session_state["model"] = json.load(model)
 
