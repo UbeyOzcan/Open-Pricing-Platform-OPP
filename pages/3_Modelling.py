@@ -29,3 +29,4 @@ else:
                           offset=np.log(data['Exposure']),
                           family=sm.families.Poisson(link=sm.families.links.log())).fit()
     st.write(np.exp(FreqPoisson.params[0]))
+    st.write(FreqPoisson)
