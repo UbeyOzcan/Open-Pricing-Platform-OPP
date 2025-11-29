@@ -35,7 +35,7 @@ if model is not None:
 
 go = st.button(label="GET !")
 
-@st.cache_data
+
 def fetch_data() -> pd.DataFrame:
     C = DBConn(USER, PASSWORD, DBNAME,HOST, PORT)
     cols = ', '.join([f'"{col}"' for col in st.session_state["model"]["Columns"]])

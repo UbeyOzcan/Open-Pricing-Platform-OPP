@@ -1,7 +1,7 @@
 import streamlit as st
 from src.Data import Analyzer
 
-st.title("Data Analysis")
+st.title("Univariate Analysis")
 if 'data' not in st.session_state:
     st.warning('No data found')
 
@@ -19,6 +19,9 @@ else:
                                   y = st.session_state['model']['Response'],
                                   exposure = st.session_state['model']['Offset'],
                                   model_name=st.session_state['model']['Model Name'])
+
+        uni_df_calc.insert(loc=3, column='Relative Exposure', value=uni_df_calc[st.session_state['model']['Offset']]/uni_df_calc[st.session_state['model']['Offset']].sum())
+
         st.dataframe(uni_df_calc)
 
         fig = A.plot_univariate(df=uni_df_calc,
