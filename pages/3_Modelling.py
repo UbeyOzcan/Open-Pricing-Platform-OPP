@@ -7,7 +7,9 @@ import statsmodels.formula.api as smf
 
 
 st.title("Modelling")
+
 if 'data' not in st.session_state:
+
     st.warning('No data found')
 
 else:
@@ -19,32 +21,51 @@ else:
     data=st.session_state['data']
     A = Analyzer(df=data)
     rfs = A.get_vars(y=st.session_state['model']['Response'], exposure=st.session_state['model']['Offset'])
+    response = st.session_state['model']['Response']
+    offset = st.session_state['model']['Offset']
+    Null_Model = f'{response} ~ 1'
+
+    if 'Null_Model' in st.session_state:
+
+        null_model = smf.glm(formula=Null_Model,
+                                  data=data,
+                                  offset=np.log(data[offset]),
+                                  family=sm.families.Poisson(link=sm.families.links.Log())).fit()
 
     if "selected_df" not in st.session_state:
+
         mod_df = pd.DataFrame({"Variable": rfs,
                                "Included": np.repeat(False, len(rfs))})
+
     else:
+
         mod_df = st.session_state['selected_df']
+
     selected_df = st.data_editor(mod_df)
     selected = selected_df[selected_df["Included"] == True]
     ls_selected = list(selected['Variable'])
 
     if 'exp' not in st.session_state:
+
         if len(ls_selected) == 0 :
-            expr_full = f"ClaimNb ~ 1"
+            expr_full = Null_Model
             st.sidebar.write(expr_full)
+
         else:
+
             expr = ' + '.join(ls_selected)
-            expr_full = f"ClaimNb ~ {expr}"
+            expr_full = f"{response} ~ {expr}"
             st.sidebar.write(expr_full)
+
     else:
+
         expr_full = st.session_state['exp']
         del st.session_state['exp']
 
     if 'MODEL' not in st.session_state:
         FreqPoisson = smf.glm(formula=expr_full,
                                   data=data,
-                                  offset=np.log(data['Exposure']),
+                                  offset=np.log(data[offset]),
                                   family=sm.families.Poisson(link=sm.families.links.Log())).fit()
 
     else:
@@ -57,7 +78,8 @@ else:
     df_summary = pd.merge(df_params, df_params_exp, on='Variable')
     df_summary = pd.merge(df_summary, df_pvalues, on='Variable')
     st.dataframe(df_summary)
-
+    st.dataframe(FreqPoisson.cov_params()) #that gives Variance-Covariance matrix
+    st.write(FreqPoisson)
     def do_save_session():
         st.session_state['selected_df'] = selected_df
         st.session_state['exp'] = expr_full

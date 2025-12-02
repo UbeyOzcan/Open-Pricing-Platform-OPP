@@ -2,6 +2,7 @@ import streamlit as st
 from src.DB import DBConn
 import pandas as pd
 import json
+import numpy as np
 
 st.title("Data Connector")
 
@@ -53,10 +54,14 @@ if go:
     if dbs == "Postgres":
         try:
             data = fetch_data()
+            data['Random'] = np.random.uniform(0,1,len(data))
             # Initialization
             if 'data' not in st.session_state:
-                st.session_state['data'] = data
-                st.dataframe(data.head())
+                st.session_state['data'] = data[data['Random'] <= 0.8]
+                st.session_state['test'] = data[data['Random'] > 0.8]
+                st.session_state['data'].drop(['Random'], axis=1, inplace=True)
+                st.session_state['test'].drop(['Random'], axis=1, inplace=True)
+                st.dataframe(st.session_state['data'].head())
                 st.success("Data found")
 
         except Exception as e:
