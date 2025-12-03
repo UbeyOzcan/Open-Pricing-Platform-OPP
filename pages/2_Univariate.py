@@ -8,6 +8,7 @@ if 'data' not in st.session_state:
 
 else:
     data=st.session_state['data']
+    test=st.session_state['test']
     st.sidebar.write(f"Model : {st.session_state['model']['Model Name']}")
     st.sidebar.write(f"Response : {st.session_state['model']['Response']}")
     st.sidebar.write(f"Offset : {st.session_state['model']['Offset']}")
@@ -35,8 +36,10 @@ else:
             fmt_dict = uni_df_calc_edited.set_index(rf).to_dict()[f'{rf}_fmt']
             new_col_df = uni_df_calc_edited[[rf, f'{rf}_fmt']]
             st.session_state['data'] = pd.merge(st.session_state['data'], new_col_df, how='left')
+            st.session_state['test'] = pd.merge(st.session_state['test'], new_col_df, how='left')
         if do_delete:
             st.session_state['data'] = st.session_state['data'].drop(rf, axis=1)
+            st.session_state['test'] = st.session_state['test'].drop(rf, axis=1)
         fig = A.plot_univariate(df=uni_df_calc,
                                 x=rf,
                                 model_name=st.session_state['model']['Model Name'],
